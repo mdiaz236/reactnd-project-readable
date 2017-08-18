@@ -24,29 +24,12 @@ class CategoryList extends Component {
   }
 }
 
-// const CategoryList = (props) => (
-//   <div>
-//     <h2>Categories</h2>
-//     <ul>
-//       {R.map((category) => (
-//         <li>{category}</li>
-//       ), props.categories.items)}
-//     </ul>
-//   </div>
-// )
 
 const mapStateToProps = ({ categories }) => (
   {
     categories
   }
 )
-
-
-// const mapDispatchToProps = dispatch => {
-//   return {
-//     fetchCategories: () => dispatch(fetchCategories)
-//     }
-//   }
 
 CategoryList.propTypes = {
   categories: PropTypes.object

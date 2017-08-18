@@ -20,38 +20,25 @@ import reducers from './reducers'
 const history = createHistory()
 
 // Build the middleware for intercepting and dispatching navigation actions
-const middleware = routerMiddleware(history)
+const navMiddleware = routerMiddleware(history)
 
-// Add the reducer to your store on the `router` key
-// Also apply our middleware for navigating
-// const store = createStore(
-//   combineReducers({
-//     ...reducers,
-//     router: routerReducer
-//   }),
-//   composeWithDevTools(
-//     applyMiddleware(middleware))
-// )
 const store = createStore(
-  reducers, composeWithDevTools(
-    applyMiddleware(middleware, thunkMiddleware))
+  combineReducers({
+    ...reducers,
+    router: routerReducer
+  }), composeWithDevTools(
+    applyMiddleware(navMiddleware, thunkMiddleware))
 )
 
 ReactDOM.render(
   <Provider store={store}>
-    <App />
+    { /* ConnectedRouter will use the store from Provider automatically */ }
+    <ConnectedRouter history={history}>
+      <div>
+        <Route exact path="/" component={App}/>
+      </div>
+    </ConnectedRouter>
   </Provider>,
   document.getElementById('root')
 )
-// ReactDOM.render(
-//   <Provider store={store}>
-//     { /* ConnectedRouter will use the store from Provider automatically */ }
-//     <ConnectedRouter history={history}>
-//       <div>
-//         <Route exact path="/" component={App}/>
-//       </div>
-//     </ConnectedRouter>
-//   </Provider>,
-//   document.getElementById('root')
-// )
 registerServiceWorker()

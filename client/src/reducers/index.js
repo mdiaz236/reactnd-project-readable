@@ -1,10 +1,12 @@
-import { combineReducers } from 'redux'
-import { REQUEST_CATEGORIES, RECEIVE_CATEGORIES } from '../actions'
+import {
+  REQUEST_CATEGORIES, RECEIVE_CATEGORIES,
+  REQUEST_POSTS, RECEIVE_POSTS
+} from '../actions'
 import * as R from 'ramda'
 
 function categories (state = {
   isFetching: false,
-  items: ['Bananas', 'x', 'y']
+  items: []
 }, action) {
   switch (action.type) {
     case REQUEST_CATEGORIES:
@@ -21,10 +23,24 @@ function categories (state = {
   }
 }
 
+function posts(state = {
+  isFetching: false,
+  items: true
+}, action) {
+  switch (action.type) {
+    case REQUEST_POSTS:
+      return R.merge(state, {
+        isFetching: true
+      })
+    case RECEIVE_POSTS:
+      return R.merge(state, {
+        isFetching: false,
+        items: action.posts
+      })
+    default:
+      return state
+  }
+}
 
-const app = combineReducers({
-  categories
-})
 
-
-export default app
+export default {categories, posts}
