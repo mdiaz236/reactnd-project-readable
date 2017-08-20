@@ -3,7 +3,8 @@ import * as R from 'ramda'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import { fetchPosts} from '../actions'
-import Post from  './Post'
+import PostSummary from  './PostSummary'
+import { Container, Header } from 'semantic-ui-react'
 
 
 class PostList extends Component {
@@ -14,12 +15,14 @@ class PostList extends Component {
   render() {
     return (
       <div>
-        <h2>Posts</h2>
-        <ul>
-        {R.map((post) => (
-          <Post key={post.id} post={post }/>
-        ), this.props.posts.items)}
-        </ul>
+        <Header as="h2" textAlign="center" style={{marginTop: '1em'}}>Posts</Header>
+        <Container>
+          <div>
+          {R.map((post) => (
+            <PostSummary key={post.id} post={post }/>
+          ), this.props.posts.items)}
+          </div>
+      </Container>
       </div>
     )
   }

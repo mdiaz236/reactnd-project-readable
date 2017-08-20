@@ -1,24 +1,16 @@
 import React, { Component } from 'react'
-import logo from './logo.svg'
 import './App.css'
-import CategoryList from './CategoryList'
-import PostList from './PostList'
-// import {fetchCategories} from '../utils/api'
-
+import NavMenu from './NavMenu'
+import { Header } from 'semantic-ui-react'
 
 class App extends Component {
   render() {
     return (
-      <div className="App">
-        <div className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h2>Welcome to Readable</h2>
-        </div>
-        <CategoryList />
-        <PostList />
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
+      <div className="App ui container">
+        <Header as="h1" textAlign="center">
+          Welcome to Readable
+        </Header>
+        <NavMenu />
       </div>
     )
   }

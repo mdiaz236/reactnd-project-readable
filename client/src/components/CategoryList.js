@@ -2,40 +2,46 @@ import  React, { Component } from 'react'
 import * as R from 'ramda'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
-import { fetchCategories } from '../actions'
+import { fetchPosts} from '../actions'
+import PostSummary from  './PostSummary'
+import { Container, Header } from 'semantic-ui-react'
+
 
 class CategoryList extends Component {
 
   componentDidMount() {
-    this.props.dispatch(fetchCategories())
+    this.props.dispatch(fetchPosts())
   }
 
   render() {
     return (
       <div>
-        <h2>Categories</h2>
-        <ul>
-          {R.map((category) => (
-            <li key={category.name}>{category.name}</li>
-          ), this.props.categories.items)}
-        </ul>
+        <Header as="h2" textAlign="center" style={{marginTop: '1em'}}>
+          {this.props.match.params.category}
+        </Header>
+        <Container>
+          <div>
+          {R.map((post) => (
+            <PostSummary key={post.id} post={post }/>
+          ), R.filter((post) => post.category === this.props.match.params.category,
+           this.props.posts.items))}
+          </div>
+        </Container>
       </div>
     )
   }
 }
 
-
-const mapStateToProps = ({ categories }) => (
+const mapStateToProps = ({ posts }) => (
   {
-    categories
+    posts
   }
 )
 
 CategoryList.propTypes = {
-  categories: PropTypes.object
+  PostList: PropTypes.arrayOf(PropTypes.object)
 }
 
 export default connect(
-  mapStateToProps,
-  // mapDispatchToProps
+  mapStateToProps
 )(CategoryList)

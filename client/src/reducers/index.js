@@ -25,7 +25,7 @@ function categories (state = {
 
 function posts(state = {
   isFetching: false,
-  items: true
+  items: []
 }, action) {
   switch (action.type) {
     case REQUEST_POSTS:
