@@ -2,15 +2,22 @@ import  React, { Component } from 'react'
 import * as R from 'ramda'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
-import { fetchPosts} from '../actions'
+import { fetchCategoryPosts} from '../actions'
 import PostSummary from  './PostSummary'
 import { Container, Header } from 'semantic-ui-react'
+
 
 
 class CategoryList extends Component {
 
   componentDidMount() {
-    this.props.dispatch(fetchPosts())
+    this.props.dispatch(fetchCategoryPosts(this.props.match.params.category))
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.match.params.category !== prevProps.match.params.category) {
+      this.props.dispatch(fetchCategoryPosts(this.props.match.params.category))
+    }
   }
 
   render() {
@@ -22,9 +29,9 @@ class CategoryList extends Component {
         <Container>
           <div>
           {R.map((post) => (
-            <PostSummary key={post.id} post={post }/>
-          ), R.filter((post) => post.category === this.props.match.params.category,
-           this.props.posts.items))}
+              <PostSummary key={post.id} post={post }/>
+          ), R.propOr([], this.props.match.params.category,
+            this.props.categoryPosts))}
           </div>
         </Container>
       </div>
@@ -34,7 +41,7 @@ class CategoryList extends Component {
 
 const mapStateToProps = ({ posts }) => (
   {
-    posts
+    categoryPosts: posts.categoryPosts
   }
 )
 
