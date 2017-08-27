@@ -1,3 +1,5 @@
+import * as R from 'ramda'
+
 export const REQUEST_CATEGORIES = 'REQUEST_CATEGORIES'
 export const RECEIVE_CATEGORIES = 'RECEIVE_CATEGORIES'
 export const REQUEST_POSTS = 'REQUEST_POSTS'
@@ -10,6 +12,7 @@ export const REQUEST_COMMENTS = 'REQUEST_COMMENTS'
 export const RECEIVE_COMMENTS = 'RECEIVE_COMMENTS'
 export const UPDATE_POST_VOTE = 'UPDATE_POST_VOTE'
 
+
 const auth = 'Z2V2kdf#m<.'
 
 const apiFetch = (path) => (
@@ -17,17 +20,20 @@ const apiFetch = (path) => (
    {'headers': {'Authorization': auth}})
 )
 
-const apiPut = (path) => (
+const apiPut = (path, content) => (
   fetch(`http://localhost:5001/${path}`,
-   {'headers': {'Authorization': auth},
-    'method': 'put'})
+  {'headers': {'Authorization': auth, 'Content-Type': 'application/json'},
+    'method': 'put',
+  'body': JSON.stringify({'option': 'upVote'})})
 )
 
-const apiPost = (path) => (
-  fetch(`http://localhost:5001/${path}`,
-   {'headers': {'Authorization': auth},
-    'method': 'post'})
-)
+const apiPost = (path, content) => {
+  return fetch(`http://localhost:5001/${path}`,
+   R.merge({'headers': {'Authorization': auth,
+              "Content-Type": "application/json"},
+   'method': 'post'
+ }, content))
+}
 
 // get categories
 function requestCategories() {
@@ -130,21 +136,21 @@ export function fetchPost(postId) {
 }
 
 // update votes
-function updatePostVote(postId, context, voteType) {
+function updatePostVote(postId, voteType) {
   return {
     type: UPDATE_POST_VOTE,
     postId,
-    context,
     voteType
   }
 }
 
-export function votePost(postId, context, voteType) {
+export function votePost(postId, voteType) {
   return dispatch => {
-    dispatch(updatePostVote(postId, context, voteType))
-    return apiPost(`posts/${postId}`, voteType)
+    dispatch(updatePostVote(postId, voteType))
+    return apiPost(`posts/${postId}`, {'body': JSON.stringify({'option': voteType})})
     .then(response => response.json(),
           error => console.log('An error occured.', error))
+    .then(post => dispatch(receivePost(postId, post)))
   }
 }
 

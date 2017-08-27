@@ -9,7 +9,7 @@ const CommentList = (props) => (
       <Header as='h3' dividing>Comments</Header>
       <div>
         {R.map((comment) => (
-          <Comment>
+          <Comment key={comment.id}>
             <Comment.Content>
               <Comment.Author as='a'>{comment.author}</Comment.Author>
               <Comment.Metadata>

@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import * as R from 'ramda'
-import { fetchPost, fetchComments } from '../actions'
+import { fetchPost, fetchComments, votePost } from '../actions'
 import PostContent from './PostContent'
 import CommentList from './CommentList'
 
@@ -20,11 +20,14 @@ class PostDetail extends Component {
     }
   }
 
+
   postDisplay(postId, posts, fetching) {
       if (fetching) {
         return <div>hold on</div>
       } else if (R.has(postId, posts)) {
         return <PostContent
+        voteClickHandler={(voteType) =>
+          this.props.dispatch(votePost(this.props.match.params.postId, voteType))}
                 post={R.prop(postId, posts)} />
     }  else {
       return <div>nope</div>

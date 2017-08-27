@@ -63,6 +63,15 @@ function posts(state = {
         isFetching: false,
         items: R.assoc(action.postId, action.post, state.items)
       })
+    case UPDATE_POST_VOTE:
+      return R.merge(state, {
+        items: R.assocPath([action.postId, 'voteScore'],
+            (R.cond([[R.equals('upVote'), R.always(1)],
+                    [R.equals('downVote'), R.always(-1)],
+                    [R.T, R.always(0)]]) (action.voteType)) +
+            (R.path(['items', action.postId, 'voteScore'], state)),
+                    state.items)
+      })
     default:
       return state
   }

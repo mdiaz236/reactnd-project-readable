@@ -10,7 +10,7 @@ import {
 import * as R from 'ramda'
 import * as moment from 'moment'
 
-const PostContent = ({post}) => (
+const PostContent = ({post, voteClickHandler}) => (
   <Container>
     <Segment>
       <Grid>
@@ -39,10 +39,10 @@ const PostContent = ({post}) => (
           <Grid.Row>
             <Button positive icon='arrow up' style={{
               margin: '1pt'
-            }}/>
+            }} onClick={() => voteClickHandler('upVote')}/>
             <Button negative icon='arrow down' style={{
               margin: '1pt'
-            }}/>
+            }}  onClick={() => voteClickHandler('downVote')}/>
           </Grid.Row>
         </Grid.Column>
       </Grid>

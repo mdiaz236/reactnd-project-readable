@@ -2,7 +2,7 @@ import  React, { Component } from 'react'
 import * as R from 'ramda'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
-import { fetchPosts} from '../actions'
+import { fetchPosts, votePost} from '../actions'
 import PostSummary from  './PostSummary'
 import { Container, Header } from 'semantic-ui-react'
 
@@ -19,7 +19,10 @@ class PostList extends Component {
         <Container>
           <div>
           {R.map((post) => (
-            <PostSummary key={post.id} post={post }/>
+            <PostSummary key={post.id} post={post }
+            voteClickHandler={(voteType) =>
+              this.props.dispatch(votePost(post.id, voteType))}
+              />
           ), R.reverse(R.sortBy(R.prop('voteScore'), R.values(this.props.posts.items))))}
           </div>
       </Container>
@@ -28,9 +31,10 @@ class PostList extends Component {
   }
 }
 
-const mapStateToProps = ({ posts }) => (
+const mapStateToProps = ({ posts, router }) => (
   {
-    posts
+    posts,
+    router
   }
 )
 
