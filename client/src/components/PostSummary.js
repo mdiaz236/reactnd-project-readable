@@ -1,10 +1,11 @@
 import React from 'react'
-import { Grid,  Button, Header, Item, Segment, Statistic } from 'semantic-ui-react'
+import { Grid,  Button, Item, Statistic } from 'semantic-ui-react'
 import { Link } from 'react-router-dom'
+import * as moment from 'moment'
 
 
 const PostSummary = (props) => (
-  <Grid celled>
+  <Grid equal celled>
   <Grid.Column width={2}>
   <Statistic>
       <Statistic.Label>
@@ -20,13 +21,13 @@ const PostSummary = (props) => (
     <Button negative icon='arrow down' style={{margin: '1pt'}}/>
 
     </Grid.Column>
-    <Grid.Column width={8}>
+    <Grid.Column width={10}>
     <Item>
     <Item.Content>
       <Link to={`/post/${props.post.id}`}>
         <Item.Header as='h3'>{props.post.title}</Item.Header>
       </Link>
-      <Item.Meta>posted by {props.post.author} on {new Date(props.post.timestamp).toDateString()}</Item.Meta>
+      <Item.Meta>posted by {props.post.author} on {moment(props.post.timestamp).calendar()}</Item.Meta>
       <Item.Description>category: {props.post.category}</Item.Description>
       </Item.Content>
       </Item>

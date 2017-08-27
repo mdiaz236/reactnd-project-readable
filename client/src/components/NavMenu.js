@@ -3,8 +3,8 @@ import * as R from 'ramda'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import { fetchCategories } from '../actions'
-import { Dropdown, Icon, Input, Menu } from 'semantic-ui-react'
-import { NavLink, Link } from 'react-router-dom'
+import { Dropdown, Menu } from 'semantic-ui-react'
+import {  Link } from 'react-router-dom'
 
 class NavMenu extends Component {
 
@@ -15,20 +15,24 @@ class NavMenu extends Component {
   render() {
     return (
       <Menu>
-        <Menu.Item active={this.props.path === '/'}>
-          <Link to="/">Home</Link>
-        </Menu.Item>
+        <Link to="/">
+          <Menu.Item active={this.props.path === '/'}>
+            Home
+          </Menu.Item>
+        </Link>
         <Dropdown item text='Categories'>
           <Dropdown.Menu>
             {R.map((category) => (
-              <Link to={`/category/${category.name}`}>
-              <Dropdown.Item key={category.name}
-                active={this.props.path === `/category/${category.name}`}>
-                  {category.name}
+              <div key={category.path}>
+                <Link to={`/category/${category.name}`}>
+                <Dropdown.Item key={category.name}
+                  active={this.props.path === `/category/${category.path}`}>
+                    {category.name}
 
-                </Dropdown.Item>
-                </Link>
-            ), this.props.categories.items)}
+                  </Dropdown.Item>
+                  </Link>
+                </div>
+            ), R.sortBy(R.prop('name'), this.props.categories.items))}
           </Dropdown.Menu>
         </Dropdown>
       </Menu>

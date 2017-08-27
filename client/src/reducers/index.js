@@ -3,8 +3,11 @@ import {
   REQUEST_POSTS, RECEIVE_POSTS,
   REQUEST_CATEGORY_POSTS, RECEIVE_CATEGORY_POSTS,
   REQUEST_POST, RECEIVE_POST,
+  REQUEST_COMMENTS, RECEIVE_COMMENTS,
+  UPDATE_POST_VOTE
 } from '../actions'
 import * as R from 'ramda'
+
 
 function categories (state = {
   isFetching: false,
@@ -27,9 +30,8 @@ function categories (state = {
 
 function posts(state = {
   isFetching: false,
-  items: [],
-  categoryPosts: {},
-  individualPosts: {}
+  items: {},
+  categoryPostIds: {},
 }, action) {
   switch (action.type) {
     case REQUEST_POSTS:
@@ -39,7 +41,7 @@ function posts(state = {
     case RECEIVE_POSTS:
       return R.merge(state, {
         isFetching: false,
-        items: action.posts
+        items: R.indexBy(R.prop('id'), action.posts)
       })
     case REQUEST_CATEGORY_POSTS:
       return R.merge(state, {
@@ -47,7 +49,10 @@ function posts(state = {
       })
     case RECEIVE_CATEGORY_POSTS:
       return R.merge(state, {
-        categoryPosts: R.assoc(action.category, action.posts, state.categoryPosts)
+        isFetching: false,
+        items: R.merge(state.items, R.indexBy(R.prop('id'), action.posts)),
+        categoryPostIds: R.assoc(action.category,
+          R.pluck('id', action.posts), state.categoryPostIds)
       })
     case REQUEST_POST:
       return R.merge(state, {
@@ -55,12 +60,31 @@ function posts(state = {
       })
     case RECEIVE_POST:
       return R.merge(state, {
-        individualPosts: R.assoc(action.postId, action.post, state.individualPosts)
+        isFetching: false,
+        items: R.assoc(action.postId, action.post, state.items)
       })
     default:
       return state
   }
 }
 
+function comments(state = {
+  isFetching: false,
+  items: {}
+}, action){
+  switch (action.type) {
+    case REQUEST_COMMENTS:
+      return R.merge(state, {
+        isFetching: true
+      })
+    case RECEIVE_COMMENTS:
+      return R.merge(state, {
+        isFetching: false,
+        items: R.assoc(action.postId, action.comments, state.items)
+      })
+    default:
+      return state
+  }
+}
 
-export default {categories, posts}
+export default {categories, posts, comments}

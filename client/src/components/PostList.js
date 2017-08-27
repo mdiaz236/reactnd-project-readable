@@ -20,7 +20,7 @@ class PostList extends Component {
           <div>
           {R.map((post) => (
             <PostSummary key={post.id} post={post }/>
-          ), this.props.posts.items)}
+          ), R.reverse(R.sortBy(R.prop('voteScore'), R.values(this.props.posts.items))))}
           </div>
       </Container>
       </div>

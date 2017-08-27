@@ -6,6 +6,9 @@ export const REQUEST_CATEGORY_POSTS = 'REQUEST_CATEGORY_POSTS'
 export const RECEIVE_CATEGORY_POSTS = 'RECEIVE_CATEGORY_POSTS'
 export const REQUEST_POST = 'REQUEST_POST'
 export const RECEIVE_POST = 'RECEIVE_POST'
+export const REQUEST_COMMENTS = 'REQUEST_COMMENTS'
+export const RECEIVE_COMMENTS = 'RECEIVE_COMMENTS'
+export const UPDATE_POST_VOTE = 'UPDATE_POST_VOTE'
 
 const auth = 'Z2V2kdf#m<.'
 
@@ -14,14 +17,26 @@ const apiFetch = (path) => (
    {'headers': {'Authorization': auth}})
 )
 
+const apiPut = (path) => (
+  fetch(`http://localhost:5001/${path}`,
+   {'headers': {'Authorization': auth},
+    'method': 'put'})
+)
+
+const apiPost = (path) => (
+  fetch(`http://localhost:5001/${path}`,
+   {'headers': {'Authorization': auth},
+    'method': 'post'})
+)
+
 // get categories
-export function requestCategories() {
+function requestCategories() {
   return {
     type: REQUEST_CATEGORIES
   }
 }
 
-export function receiveCategories(categories) {
+function receiveCategories(categories) {
   return {
     type: RECEIVE_CATEGORIES,
     categories
@@ -39,13 +54,13 @@ export function fetchCategories() {
 }
 
 // get all posts
-export function requestPosts() {
+function requestPosts() {
   return {
     type: REQUEST_POSTS
   }
 }
 
-export function receivePosts(posts) {
+function receivePosts(posts) {
   return {
     type: RECEIVE_POSTS,
     posts
@@ -63,14 +78,14 @@ export function fetchPosts() {
 }
 
 // get category posts
-export function requestCategoryPosts(category) {
+function requestCategoryPosts(category) {
   return {
     type: REQUEST_CATEGORY_POSTS,
     category
   }
 }
 
-export function receiveCategoryPosts(category, posts) {
+function receiveCategoryPosts(category, posts) {
   return {
     type: RECEIVE_CATEGORY_POSTS,
     category,
@@ -89,14 +104,14 @@ export function fetchCategoryPosts(category) {
 }
 // get single post
 // get category posts
-export function requestPost(postId) {
+function requestPost(postId) {
   return {
     type: REQUEST_POST,
     postId
   }
 }
 
-export function receivePost(postId, post) {
+function receivePost(postId, post) {
   return {
     type: RECEIVE_POST,
     postId,
@@ -113,6 +128,27 @@ export function fetchPost(postId) {
       .then(post => dispatch(receivePost(postId, post)))
   }
 }
+
+// update votes
+function updatePostVote(postId, context, voteType) {
+  return {
+    type: UPDATE_POST_VOTE,
+    postId,
+    context,
+    voteType
+  }
+}
+
+export function votePost(postId, context, voteType) {
+  return dispatch => {
+    dispatch(updatePostVote(postId, context, voteType))
+    return apiPost(`posts/${postId}`, voteType)
+    .then(response => response.json(),
+          error => console.log('An error occured.', error))
+  }
+}
+
+
 // update post
 
 
@@ -124,7 +160,30 @@ export function fetchPost(postId) {
 // delete post
 
 // get post comments
+export function requestComments(postId) {
+  return {
+    type: REQUEST_COMMENTS,
+    postId
+  }
+}
 
+export function receiveComments(postId, comments) {
+  return {
+    type: RECEIVE_COMMENTS,
+    postId,
+    comments
+  }
+}
+
+export function fetchComments(postId) {
+  return dispatch => {
+    dispatch(requestComments(postId))
+    return apiFetch(`posts/${postId}/comments`)
+      .then(response => response.json(),
+            error => console.log('An error occured.', error))
+      .then(comments => dispatch(receiveComments(postId, comments)))
+  }
+}
 // save draft comment
 
 // edit comment
