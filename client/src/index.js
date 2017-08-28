@@ -5,6 +5,7 @@ import App from './components/App'
 import PostList from './components/PostList'
 import CategoryList from './components/CategoryList'
 import PostDetail from './components/PostDetail'
+import NewPost from './components/NewPost'
 
 
 import registerServiceWorker from './registerServiceWorker'
@@ -14,7 +15,7 @@ import { Provider } from 'react-redux'
 import 'semantic-ui-css/semantic.min.css'
 
 import createHistory from 'history/createBrowserHistory'
-import { Route } from 'react-router'
+import { Route, Switch } from 'react-router'
 
 import { composeWithDevTools } from 'redux-devtools-extension'
 
@@ -43,7 +44,10 @@ ReactDOM.render(
         <App />
         <Route exact path="/" component={PostList} />
         <Route path="/category/:category" component={CategoryList} />
-        <Route path="/post/:postId" component={PostDetail} />
+        <Switch>
+          <Route path="/post/new" component={NewPost} />
+          <Route path="/post/:postId" component={PostDetail} />
+        </Switch>
       </div>
     </ConnectedRouter>
   </Provider>,

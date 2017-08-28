@@ -4,7 +4,7 @@ import {
   REQUEST_CATEGORY_POSTS, RECEIVE_CATEGORY_POSTS,
   REQUEST_POST, RECEIVE_POST,
   REQUEST_COMMENTS, RECEIVE_COMMENTS,
-  UPDATE_POST_VOTE
+  UPDATE_POST_VOTE, ADD_POST
 } from '../actions'
 import * as R from 'ramda'
 
@@ -71,6 +71,10 @@ function posts(state = {
                     [R.T, R.always(0)]]) (action.voteType)) +
             (R.path(['items', action.postId, 'voteScore'], state)),
                     state.items)
+      })
+    case ADD_POST:
+      return R.merge(state, {
+        items: R.assoc(action.post.id, action.post, state.items)
       })
     default:
       return state
