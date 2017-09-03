@@ -6,6 +6,7 @@ import PostList from './components/PostList'
 import CategoryList from './components/CategoryList'
 import PostDetail from './components/PostDetail'
 import NewPost from './components/NewPost'
+import EditPost from './components/EditPost'
 
 
 import registerServiceWorker from './registerServiceWorker'
@@ -20,6 +21,8 @@ import { Route, Switch } from 'react-router'
 import { composeWithDevTools } from 'redux-devtools-extension'
 
 import { ConnectedRouter, routerReducer, routerMiddleware } from 'react-router-redux'
+import { reducer as formReducer } from 'redux-form'
+
 import reducers from './reducers'
 
 // Create a history of your choosing (we're using a browser history in this case)
@@ -31,7 +34,8 @@ const navMiddleware = routerMiddleware(history)
 const store = createStore(
   combineReducers({
     ...reducers,
-    router: routerReducer
+    router: routerReducer,
+    form: formReducer
   }), composeWithDevTools(
     applyMiddleware(navMiddleware, thunkMiddleware))
 )
@@ -46,6 +50,7 @@ ReactDOM.render(
         <Route path="/category/:category" component={CategoryList} />
         <Switch>
           <Route path="/post/new" component={NewPost} />
+          <Route path="/post/:postId/edit" component={EditPost} />
           <Route path="/post/:postId" component={PostDetail} />
         </Switch>
       </div>

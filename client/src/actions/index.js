@@ -12,7 +12,7 @@ export const REQUEST_COMMENTS = 'REQUEST_COMMENTS'
 export const RECEIVE_COMMENTS = 'RECEIVE_COMMENTS'
 export const UPDATE_POST_VOTE = 'UPDATE_POST_VOTE'
 export const ADD_POST = 'ADD_POST'
-
+export const UPDATE_POST = 'UPDATE_POST'
 
 const auth = 'Z2V2kdf#m<.'
 
@@ -157,8 +157,27 @@ export function votePost(postId, voteType) {
 }
 
 
-// update post
+// edit post
+function updatePost(postId, title, body) {
+  return {
+    type: UPDATE_POST,
+    postId,
+    title,
+    body
+  }
+}
 
+export function editPost({postId, title, body}) {
+  console.log(title, body)
+  console.log({'body': JSON.stringify({title, body})})
+  return dispatch => {
+    dispatch(updatePost(postId, title, body))
+    return apiPut(`posts/${postId}`, {'body': JSON.stringify({title, body})})
+    .then(response => response.json(),
+          error => console.log('An error occured.', error))
+    .then(post => dispatch(receivePost(post.id, post)))
+  }
+}
 
 // submit new post
 function addPost(post) {

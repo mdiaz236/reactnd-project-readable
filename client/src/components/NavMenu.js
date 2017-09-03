@@ -35,6 +35,11 @@ class NavMenu extends Component {
             ), R.sortBy(R.prop('name'), this.props.categories.items))}
           </Dropdown.Menu>
         </Dropdown>
+        <Link to="/post/new">
+          <Menu.Item active={this.props.path === '/post/new'}>
+            New Post
+          </Menu.Item>
+        </Link>
       </Menu>
     )
   }

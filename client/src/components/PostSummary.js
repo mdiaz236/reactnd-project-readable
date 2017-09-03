@@ -25,13 +25,15 @@ const PostSummary = ({ post, voteClickHandler }) => (
     </Grid.Column>
     <Grid.Column width={10}>
     <Item>
-    <Item.Content>
       <Link to={`/post/${post.id}`}>
+    <Item.Content>
+
         <Item.Header as='h3'>{post.title}</Item.Header>
-      </Link>
+
       <Item.Meta>posted by {post.author} on {moment(post.timestamp).calendar()}</Item.Meta>
       <Item.Description>category: {post.category}</Item.Description>
       </Item.Content>
+      </Link>
       </Item>
     </Grid.Column>
   </Grid>

@@ -9,6 +9,7 @@ import {
 } from 'semantic-ui-react'
 import * as R from 'ramda'
 import * as moment from 'moment'
+import { Link } from 'react-router-dom'
 
 const PostContent = ({post, voteClickHandler}) => (
   <Container>
@@ -23,7 +24,14 @@ const PostContent = ({post, voteClickHandler}) => (
             on {moment(post.timestamp).calendar()}
           </Header>
           <Header as='h4'>category: {post.category}</Header>
-          <Container text>{post.body}</Container>
+          <Grid.Row>{post.body}</Grid.Row>
+          <br />
+          <Grid.Row>
+          <Link to={`/post/${post.id}/edit`}>
+                <Button size='small' compact>edit post</Button>
+                </Link>
+            <Button size='small' compact negative>delete post</Button>
+          </Grid.Row>
         </Grid.Column>
         <Grid.Column textAlign='center' width={4}>
           <Grid.Row>
@@ -37,10 +45,10 @@ const PostContent = ({post, voteClickHandler}) => (
             </Statistic>
           </Grid.Row>
           <Grid.Row>
-            <Button positive icon='arrow up' style={{
+            <Button icon='arrow up' style={{
               margin: '1pt'
             }} onClick={() => voteClickHandler('upVote')}/>
-            <Button negative icon='arrow down' style={{
+            <Button icon='arrow down' style={{
               margin: '1pt'
             }}  onClick={() => voteClickHandler('downVote')}/>
           </Grid.Row>
