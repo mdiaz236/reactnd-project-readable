@@ -1,9 +1,14 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import * as R from 'ramda'
-import { fetchPost, fetchComments, votePost } from '../actions'
+import {
+  fetchPost, fetchComments, voteComment, votePost, submitComment,
+  removePost
+} from '../actions'
 import PostContent from './PostContent'
 import CommentList from './CommentList'
+import * as uuid from 'uuid'
+import { reset } from 'redux-form'
 
 
 class PostDetail extends Component {
@@ -20,26 +25,52 @@ class PostDetail extends Component {
     }
   }
 
+  postVoteClickHandler = (voteType) => (
+    this.props.dispatch(votePost(this.props.match.params.postId, voteType))
+  )
+
+  deletePostHandler = () => {
+    this.props.dispatch(removePost(this.props.match.params.postId))
+    this.props.history.push(`/`)
+  }
+  commentVoteClickHanndler = (commentId, voteType) => (
+    this.props.dispatch(voteComment(commentId, voteType))
+  )
+
+  newCommentSubmit = values => {
+    const  {comment, owner} = values
+
+    const content = {
+      'body': comment, 'author': owner,
+      'votes': 1,
+      'parentId': this.props.match.params.postId,
+      'timestamp': new Date(), 'id': uuid()
+    }
+    this.props.dispatch(submitComment(content))
+    this.props.dispatch(reset('comment'))
+  }
 
   postDisplay(postId, posts, fetching) {
       if (fetching) {
         return <div>hold on</div>
-      } else if (R.has(postId, posts)) {
+      } else if (R.has(postId, posts) & R.not(R.path([postId, 'deleted'], posts))) {
         return <PostContent
-        voteClickHandler={(voteType) =>
-          this.props.dispatch(votePost(this.props.match.params.postId, voteType))}
+        voteClickHandler={this.postVoteClickHandler}
+                deletePostHandler={this.deletePostHandler}
                 post={R.prop(postId, posts)} />
     }  else {
       return <div>nope</div>
     }
   }
 
-  commentDisplay(postId, comments, fetching) {
+  commentDisplay(postId, postComments, comments, fetching, posts) {
       if (fetching) {
         return <div>hold on</div>
-      } else if (R.has(postId, comments)) {
-        return <CommentList
-                comments={R.prop(postId, comments)} />
+      } else if (R.has(postId, postComments) & R.not(R.path([postId, 'deleted'], posts))) {
+        return (<CommentList
+                comments={R.props(R.prop(postId, postComments), comments)}
+                voteClickHandler={this.commentVoteClickHanndler}
+                newCommentSubmit={this.newCommentSubmit}/>)
     }  else {
       return <div>nope</div>
     }
@@ -51,8 +82,10 @@ class PostDetail extends Component {
       this.props.posts,
       this.props.isFetchingPost )}
         {this.commentDisplay(this.props.match.params.postId,
+          this.props.postComments,
           this.props.comments,
-          this.props.isFetchingComments )}
+          this.props.isFetchingComments,
+          this.props.posts)}
     </div>)
   }
 }
@@ -61,7 +94,8 @@ const mapStateToProps = ({ posts, comments }) => ({
   isFetchingPost: posts['isFetching'],
   posts: posts['items'],
   isFetchingComments: posts['isFetching'],
-  comments: comments['items']
+  comments: comments['items'],
+  postComments: comments['postComments']
 })
 
 export default connect(mapStateToProps)(PostDetail)

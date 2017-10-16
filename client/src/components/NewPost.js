@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Form, Segment } from 'semantic-ui-react'
+import { Segment } from 'semantic-ui-react'
 import * as uuid from 'uuid'
 import { connect } from 'react-redux'
 import * as R from 'ramda'

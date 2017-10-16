@@ -11,7 +11,7 @@ import * as R from 'ramda'
 import * as moment from 'moment'
 import { Link } from 'react-router-dom'
 
-const PostContent = ({post, voteClickHandler}) => (
+const PostContent = ({post, voteClickHandler, deletePostHandler}) => (
   <Container>
     <Segment>
       <Grid>
@@ -30,7 +30,10 @@ const PostContent = ({post, voteClickHandler}) => (
           <Link to={`/post/${post.id}/edit`}>
                 <Button size='small' compact>edit post</Button>
                 </Link>
-            <Button size='small' compact negative>delete post</Button>
+            <Button size='small' compact negative
+              onClick={deletePostHandler}>
+            delete post
+            </Button>
           </Grid.Row>
         </Grid.Column>
         <Grid.Column textAlign='center' width={4}>

@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import { fetchPosts, votePost} from '../actions'
 import PostSummary from  './PostSummary'
-import { Container, Header } from 'semantic-ui-react'
+import { Container, Header, Loader } from 'semantic-ui-react'
 
 
 class PostList extends Component {
@@ -14,32 +14,41 @@ class PostList extends Component {
 
   render() {
     return (
+      this.props.fetching ? <div>  <Loader active inline='centered' />
+</div> : (
+        R.isEmpty(this.props.posts) ? <div>No posts!</div> :
+
       <div>
         <Header as="h2" textAlign="center" style={{marginTop: '1em'}}>Posts</Header>
         <Container>
           <div>
           {R.map((post) => (
-            <PostSummary key={post.id} post={post }
+            <PostSummary key={R.prop('id', post)} post={post }
             voteClickHandler={(voteType) =>
-              this.props.dispatch(votePost(post.id, voteType))}
+              this.props.dispatch(votePost(R.prop('id', post), voteType))}
               />
-          ), R.reverse(R.sortBy(R.prop('voteScore'), R.values(this.props.posts.items))))}
+          ), R.reverse(
+            R.sortBy(
+              R.prop('voteScore'),
+                    R.reject(R.prop('deleted'), R.values(this.props.posts)))))}
           </div>
-      </Container>
+        </Container>
       </div>
     )
+  )
   }
 }
 
 const mapStateToProps = ({ posts, router }) => (
   {
-    posts,
+    fetching: posts.fetching,
+    posts: posts.items,
     router
   }
 )
 
 PostList.propTypes = {
-  PostList: PropTypes.arrayOf(PropTypes.object)
+  posts: PropTypes.object
 }
 
 export default connect(

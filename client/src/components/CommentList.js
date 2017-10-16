@@ -1,7 +1,8 @@
 import React from 'react'
 import * as R from 'ramda'
-import {Comment, Form, Button, Header, Segment} from 'semantic-ui-react'
-import * as moment from 'moment'
+import {Comment, Header, Segment} from 'semantic-ui-react'
+import CommentItem from './CommentItem'
+import CommentForm from './CommentForm'
 
 const CommentList = (props) => (
   <Segment>
@@ -9,31 +10,13 @@ const CommentList = (props) => (
       <Header as='h3' dividing>Comments</Header>
       <div>
         {R.map((comment) => (
-          <Comment key={comment.id}>
-            <Comment.Content>
-              <Comment.Author as='a'>{comment.author}</Comment.Author>
-              <Comment.Metadata>
-                <div>{comment.voteScore}
-                  votes</div>
-                <div>{moment(comment.timestamp).calendar()}</div>
-              </Comment.Metadata>
-              <Comment.Text>{comment.body}</Comment.Text>
-              <Comment.Actions>
-                <Comment.Action>
-                  <Button size='mini' icon='arrow up'/>
-                  <Button size='mini' icon='arrow down'/>
-                </Comment.Action>
-              </Comment.Actions>
-            </Comment.Content>
-          </Comment>
+          <CommentItem key={comment.id} comment={comment}
+          voteClickHandler={props.voteClickHandler}/>
         ), R.reverse(R.sortBy(R.prop('voteScore'), props.comments)))}
       </div>
+      </Comment.Group>
+      <CommentForm onSubmit={props.newCommentSubmit}/>
 
-      <Form reply>
-        <Form.TextArea/>
-        <Button content='Add comment' labelPosition='left' icon='edit' primary/>
-      </Form>
-    </Comment.Group>
   </Segment>
 )
 

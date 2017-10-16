@@ -8,11 +8,18 @@ export const REQUEST_CATEGORY_POSTS = 'REQUEST_CATEGORY_POSTS'
 export const RECEIVE_CATEGORY_POSTS = 'RECEIVE_CATEGORY_POSTS'
 export const REQUEST_POST = 'REQUEST_POST'
 export const RECEIVE_POST = 'RECEIVE_POST'
-export const REQUEST_COMMENTS = 'REQUEST_COMMENTS'
-export const RECEIVE_COMMENTS = 'RECEIVE_COMMENTS'
 export const UPDATE_POST_VOTE = 'UPDATE_POST_VOTE'
 export const ADD_POST = 'ADD_POST'
 export const UPDATE_POST = 'UPDATE_POST'
+export const DELETE_POST = 'DELETE_POST'
+export const REQUEST_COMMENTS = 'REQUEST_COMMENTS'
+export const RECEIVE_COMMENTS = 'RECEIVE_COMMENTS'
+export const REQUEST_COMMENT = 'REQUEST_COMMENT'
+export const RECEIVE_COMMENT = 'RECEIVE_COMMENT'
+export const UPDATE_COMMENT_VOTE = 'UPDATE_COMMENT_VOTE'
+export const ADD_COMMENT = 'ADD_COMMENT'
+export const EDIT_COMMENT = 'EDIT_COMMENT'
+export const CANCEL_COMMENT_EDIT = 'CANCEL_COMMENT_EDIT'
 
 const auth = 'Z2V2kdf#m<.'
 
@@ -34,6 +41,14 @@ const apiPost = (path, content) => {
    R.merge({'headers': {'Authorization': auth,
               'Content-Type': 'application/json'},
    'method': 'post'
+ }, content))
+}
+
+const apiDelete = (path, content) => {
+  return fetch(`http://localhost:5001/${path}`,
+   R.merge({'headers': {'Authorization': auth,
+              'Content-Type': 'application/json'},
+   'method': 'delete'
  }, content))
 }
 
@@ -111,7 +126,6 @@ export function fetchCategoryPosts(category) {
   }
 }
 // get single post
-// get category posts
 function requestPost(postId) {
   return {
     type: REQUEST_POST,
@@ -137,7 +151,7 @@ export function fetchPost(postId) {
   }
 }
 
-// update votes
+// update post votes
 function updatePostVote(postId, voteType) {
   return {
     type: UPDATE_POST_VOTE,
@@ -200,15 +214,30 @@ export function submitPost(newPost) {
 
 // delete post
 
+function deletePost(postId) {
+  return {
+    type: DELETE_POST,
+    postId
+  }
+}
+
+export function removePost(postId) {
+  return dispatch => {
+    dispatch(deletePost(postId))
+    return apiDelete(`posts/${postId}`)
+  }
+}
+
 // get post comments
-export function requestComments(postId) {
+
+function requestComments(postId) {
   return {
     type: REQUEST_COMMENTS,
     postId
   }
 }
 
-export function receiveComments(postId, comments) {
+function receiveComments(postId, comments) {
   return {
     type: RECEIVE_COMMENTS,
     postId,
@@ -225,8 +254,76 @@ export function fetchComments(postId) {
       .then(comments => dispatch(receiveComments(postId, comments)))
   }
 }
-// save draft comment
+
+// get comment by id
+
+function requestComment(commentId) {
+  return {
+    type: REQUEST_COMMENT,
+    commentId
+  }
+}
+
+function receiveComment(commentId, comment) {
+  return {
+    type: RECEIVE_COMMENT,
+    commentId,
+    comment
+  }
+}
+
+export function fetchComment(commentId) {
+  return dispatch => {
+    dispatch(requestComment(commentId))
+    return apiFetch(`comments/${commentId}`)
+      .then(response => response.json(),
+            error => console.log('An error occured.', error))
+      .then(comment => dispatch(receiveComment(commentId, comment)))
+  }
+}
+
+// add comment
+
+function addComment(newComment) {
+  console.log(newComment)
+  return {
+    type: ADD_COMMENT,
+    comment: newComment
+  }
+}
+
+export function submitComment(newComment) {
+  return dispatch => {
+    dispatch(addComment(newComment))
+    return apiPost('comments', {'body': JSON.stringify(newComment)})
+      .then(response => response.json(),
+            error => console.log('An error occured.', error))
+      .then(comment => dispatch(receiveComment(comment.id, comment)))
+  }
+}
 
 // edit comment
+
+
+
+// update comment votes
+function updateCommentVote(commentId, voteType) {
+  return {
+    type: UPDATE_COMMENT_VOTE,
+    commentId,
+    voteType
+  }
+}
+
+export function voteComment(commentId, voteType) {
+  return dispatch => {
+    dispatch(updateCommentVote(commentId, voteType))
+    return apiPost(`comments/${commentId}`, {'body': JSON.stringify({'option': voteType})})
+    .then(response => response.json(),
+          error => console.log('An error occured.', error))
+    .then(comment => dispatch(receivePost(commentId, comment)))
+  }
+}
+
 
 // delete comment

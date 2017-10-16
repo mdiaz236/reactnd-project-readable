@@ -17,23 +17,22 @@ const PostSummary = ({ post, voteClickHandler }) => (
       </Statistic>
     </Grid.Column>
     <Grid.Column textAlign='center' width={2}>
-    <Button positive icon='arrow up' style={{margin: '1pt'}}
+    <Button icon='arrow up' style={{margin: '1pt'}}
     onClick={() => voteClickHandler('upVote')} />
-    <Button negative icon='arrow down' style={{margin: '1pt'}}
+    <Button icon='arrow down' style={{margin: '1pt'}}
     onClick={() => voteClickHandler('downVote')}/>
 
     </Grid.Column>
     <Grid.Column width={10}>
     <Item>
-      <Link to={`/post/${post.id}`}>
     <Item.Content>
+      <Link to={`/post/${post.id}`}>
 
         <Item.Header as='h3'>{post.title}</Item.Header>
-
+        </Link>
       <Item.Meta>posted by {post.author} on {moment(post.timestamp).calendar()}</Item.Meta>
       <Item.Description>category: {post.category}</Item.Description>
       </Item.Content>
-      </Link>
       </Item>
     </Grid.Column>
   </Grid>
