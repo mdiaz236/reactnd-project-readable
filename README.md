@@ -1,99 +1,58 @@
-# Readable API Server
+# Readable
 
-## Installation
+Project submission for Udacity's React Fundamentals course.
+A react/redux app that has text posts with voting and commenting.
 
-Install packages: `npm install`
-Launch server: `node server`
-Unless modified in `config.js` server will use port 5001
+## Server
+
+### Installation
+To install dependencies:
+`npm install`
+or
+`yarn`
+
+### Running
+To run the server:
+`node server`
+
+### Attribution
+The server is based on the [starter repo](https://github.com/udacity/reactnd-project-readable-starter
+) provided by Udacity .
+
+## Client
+### Installation
+
+In the client directory (`cd client`), install dependencies:
+
+`yarn` or `npm install`
+
+### Running
+In the client directory (`cd client`), start the client dev server:
+`yarn start` or `npm start`
+
+### Attribution
+
+The client was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
 
 
-## API
-Use an Authorization header to work with your own data:
+## MIT License
 
-`fetch(url, { headers: { 'Authorization': 'whatever-you-want' }})`
+Copyright (c) 2017 Miguel Diaz
 
-The following endpoints are available:  
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
 
-`GET /categories`  
-  **USAGE:**   
-    Get all of the categories available for the app. List is found in categories.js.
-    Feel free to extend this list as you desire.    
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
 
-`GET /:category/posts`  
-  **USAGE:**    
-    Get all of the posts for a particular category   
-
-`GET /posts`  
-  **USAGE:**    
-    Get all of the posts. Useful for the main page when no category is selected.  
-
-`POST /posts`  
-  **USAGE:**  
-    Add a new post  
-  
-  **PARAMS:**   
-    id - UUID should be fine, but any unique id will work  
-    timestamp - timestamp in whatever format you like, you can use Date.now() if you like  
-    title - String  
-    body - String  
-    owner - String  
-    category: Any of the categories listed in categories.js. Feel free to extend this list as you desire.  
-
-`GET /posts/:id`  
-  **USAGE:**  
-    Get the details of a single post  
-
-`POST /posts/:id`  
-  **USAGE:**  
-    Used for voting on a post  
-
-  **PARAMS:**  
-    option - String: Either "upVote" or "downVote"  
-    
-`PUT /posts/:id`  
-  **USAGE:**  
-    Edit the details of an existing post  
-
-  **PARAMS:**  
-    title - String  
-    body - String  
-
-`DELETE /posts/:id`  
-  **USAGE:**  
-    Sets the deleted flag for a post to 'true'.   
-    Sets the parentDeleted flag for all child comments to 'true'.  
-  
-`GET /posts/:id/comments`  
-  **USAGE:**  
-    Get all the comments for a single post  
-
-`POST /comments`  
-  **USAGE:**  
-    Add a comment to a post  
-
-  **PARAMS:**  
-    id: Any unique ID. As with posts, UUID is probably the best here.  
-    timestamp: timestamp. Get this however you want.  
-    body: String  
-    owner: String  
-    parentId: Should match a post id in the database.  
-
-`GET /comments/:id`  
-  **USAGE:**  
-    Get the details for a single comment  
-
-`POST /comments/:id`  
-  **USAGE:**  
-    Used for voting on a comment.  
-
-`PUT /comments/:id`  
-  **USAGE:**  
-    Edit the details of an existing comment  
-  
-  **PARAMS:**  
-    timestamp: timestamp. Get this however you want.  
-    body: String  
-
-`DELETE /comments/:id`  
-  **USAGE:**  
-    Sets a comment's deleted flag to 'true'  
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.

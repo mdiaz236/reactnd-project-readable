@@ -1,5 +1,6 @@
 import * as R from 'ramda'
 
+export const UPDATE_SORT = 'UPDATE_SORT'
 export const REQUEST_CATEGORIES = 'REQUEST_CATEGORIES'
 export const RECEIVE_CATEGORIES = 'RECEIVE_CATEGORIES'
 export const REQUEST_POSTS = 'REQUEST_POSTS'
@@ -50,6 +51,14 @@ const apiDelete = (path, content) => {
               'Content-Type': 'application/json'},
    'method': 'delete'
  }, content))
+}
+
+// update sorting
+export function updateSort(sortKey) {
+  return {
+    type: UPDATE_SORT,
+    sortKey
+  }
 }
 
 // get categories

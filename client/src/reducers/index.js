@@ -1,4 +1,5 @@
 import {
+  UPDATE_SORT,
   REQUEST_CATEGORIES, RECEIVE_CATEGORIES,
   REQUEST_POSTS, RECEIVE_POSTS,
   REQUEST_CATEGORY_POSTS, RECEIVE_CATEGORY_POSTS,
@@ -13,6 +14,18 @@ import {
 } from '../actions'
 import * as R from 'ramda'
 
+function app (state = {
+  sortKey: 'voteScore'
+}, action) {
+  switch (action.type) {
+    case UPDATE_SORT:
+      return R.merge(state, {
+        sortKey: action.sortKey
+      })
+    default:
+      return state
+  }
+}
 
 function categories (state = {
   isFetching: false,
@@ -159,4 +172,4 @@ function comments(state = {
   }
 }
 
-export default {categories, posts, comments}
+export default {app, categories, posts, comments}

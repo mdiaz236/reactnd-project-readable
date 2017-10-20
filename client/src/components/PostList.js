@@ -4,6 +4,8 @@ import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import { fetchPosts, votePost} from '../actions'
 import PostSummary from  './PostSummary'
+import SortPost from './SortPost'
+
 import { Container, Header, Loader } from 'semantic-ui-react'
 
 
@@ -16,10 +18,11 @@ class PostList extends Component {
     return (
       this.props.fetching ? <div>  <Loader active inline='centered' />
 </div> : (
-        R.isEmpty(this.props.posts) ? <div>No posts!</div> :
+        R.isEmpty(this.props.posts) ? <div></div> :
 
       <div>
         <Header as="h2" textAlign="center" style={{marginTop: '1em'}}>Posts</Header>
+        <SortPost />
         <Container>
           <div>
           {R.map((post) => (
@@ -29,7 +32,7 @@ class PostList extends Component {
               />
           ), R.reverse(
             R.sortBy(
-              R.prop('voteScore'),
+              R.prop(this.props.sortKey),
                     R.reject(R.prop('deleted'), R.values(this.props.posts)))))}
           </div>
         </Container>
@@ -39,11 +42,12 @@ class PostList extends Component {
   }
 }
 
-const mapStateToProps = ({ posts, router }) => (
+const mapStateToProps = ({ posts, router, app }) => (
   {
     fetching: posts.fetching,
     posts: posts.items,
-    router
+    router,
+    sortKey: app.sortKey
   }
 )
 
