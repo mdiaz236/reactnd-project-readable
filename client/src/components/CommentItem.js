@@ -2,7 +2,8 @@ import React from 'react'
 import { Button, Comment } from 'semantic-ui-react'
 import moment from 'moment'
 
-const CommentItem = ({ comment, voteClickHandler }) => (
+const CommentItem = ({ comment, voteClickHandler, editClickHandler,
+                       deleteClickHandler }) => (
   <Comment>
       <Comment.Content>
       <Comment.Author as='a'>{comment.author}</Comment.Author>
@@ -19,8 +20,10 @@ const CommentItem = ({ comment, voteClickHandler }) => (
            onClick={() => voteClickHandler(comment.id, 'upVote')}/>
           <Button size='mini' icon='arrow down'
           onClick={() => voteClickHandler(comment.id, 'downVote')}/>
-          <Button size='mini' basic>edit</Button>
-          <Button size='mini' color='red' basic>delete</Button>
+          <Button size='mini' basic
+          onClick={editClickHandler}>edit</Button>
+          <Button size='mini' color='red' basic
+          onClick={deleteClickHandler}>delete</Button>
         </Comment.Action>
       </Comment.Actions>
     </Comment.Content>

@@ -1,6 +1,6 @@
 import React from 'react'
 import { Field, reduxForm } from 'redux-form'
-import { Form, Segment, Select } from 'semantic-ui-react'
+import { Form, Select } from 'semantic-ui-react'
 import SemanticUIFormField from './SemanticUIFormField'
 import * as R from 'ramda'
 
@@ -32,7 +32,6 @@ let PostForm = (props) => {
 
 
 PostForm = reduxForm({
-  // a unique name for the form
   form: 'post'
 })(PostForm)
 

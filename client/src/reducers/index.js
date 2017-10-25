@@ -10,7 +10,7 @@ import {
   REQUEST_COMMENT, RECEIVE_COMMENT,
   UPDATE_COMMENT_VOTE,
   ADD_COMMENT, EDIT_COMMENT,
-  CANCEL_COMMENT_EDIT
+  DELETE_COMMENT
 } from '../actions'
 import * as R from 'ramda'
 
@@ -114,8 +114,7 @@ function posts(state = {
 function comments(state = {
   isFetching: false,
   items: {},
-  postComments: {},
-  edit: 'new'
+  postComments: {}
 }, action){
   switch (action.type) {
     case REQUEST_COMMENTS:
@@ -161,11 +160,16 @@ function comments(state = {
       })
     case EDIT_COMMENT:
       return R.merge(state, {
-        edit: action.commentId
+        items: R.assoc(action.comment.id,
+          R.merge(state.items[action.comment.id],
+            action.comment), state.items)
       })
-    case CANCEL_COMMENT_EDIT:
+    case DELETE_COMMENT:
+      console.log(state.items)
       return R.merge(state, {
-        edit: 'new'
+        items: R.dissoc(action.commentId, state.items),
+        postComments: R.map(R.reject(R.equals(action.commentId)),
+                          state.postComments)
       })
     default:
       return state

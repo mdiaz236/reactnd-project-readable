@@ -20,7 +20,8 @@ export const RECEIVE_COMMENT = 'RECEIVE_COMMENT'
 export const UPDATE_COMMENT_VOTE = 'UPDATE_COMMENT_VOTE'
 export const ADD_COMMENT = 'ADD_COMMENT'
 export const EDIT_COMMENT = 'EDIT_COMMENT'
-export const CANCEL_COMMENT_EDIT = 'CANCEL_COMMENT_EDIT'
+export const DELETE_COMMENT = 'DELETE_COMMENT'
+
 
 const auth = 'Z2V2kdf#m<.'
 
@@ -294,7 +295,6 @@ export function fetchComment(commentId) {
 // add comment
 
 function addComment(newComment) {
-  console.log(newComment)
   return {
     type: ADD_COMMENT,
     comment: newComment
@@ -313,7 +313,23 @@ export function submitComment(newComment) {
 
 // edit comment
 
+function editComment(updatedComment) {
+  return {
+    type: EDIT_COMMENT,
+    comment: updatedComment
+  }
+}
 
+export function submitEditedComment(updatedComment) {
+  return dispatch => {
+    dispatch(editComment(updatedComment))
+    return apiPut(`comments/${updatedComment.id}`,
+                  {'body': JSON.stringify(updatedComment)})
+      .then(response => response.json(),
+            error => console.log('An error occured.', error))
+      .then(comment => dispatch(receiveComment(comment.id, comment)))
+  }
+}
 
 // update comment votes
 function updateCommentVote(commentId, voteType) {
@@ -327,7 +343,8 @@ function updateCommentVote(commentId, voteType) {
 export function voteComment(commentId, voteType) {
   return dispatch => {
     dispatch(updateCommentVote(commentId, voteType))
-    return apiPost(`comments/${commentId}`, {'body': JSON.stringify({'option': voteType})})
+    return apiPost(`comments/${commentId}`,
+      {'body': JSON.stringify({'option': voteType})})
     .then(response => response.json(),
           error => console.log('An error occured.', error))
     .then(comment => dispatch(receivePost(commentId, comment)))
@@ -336,3 +353,16 @@ export function voteComment(commentId, voteType) {
 
 
 // delete comment
+function deleteComment(commentId) {
+  return {
+    type: DELETE_COMMENT,
+    commentId
+  }
+}
+
+export function removeComment(commentId) {
+  return dispatch => {
+    dispatch(deleteComment(commentId))
+    return apiDelete(`comments/${commentId}`)
+  }
+}

@@ -1,5 +1,4 @@
 import  React from 'react'
-import * as R from 'ramda'
 import { connect } from 'react-redux'
 import { Container, Dropdown } from 'semantic-ui-react'
 import { updateSort } from '../actions'

@@ -3,12 +3,13 @@ import { connect } from 'react-redux'
 import * as R from 'ramda'
 import {
   fetchPost, fetchComments, voteComment, votePost, submitComment,
-  removePost
+  removePost, submitEditedComment, removeComment
 } from '../actions'
 import PostContent from './PostContent'
 import CommentList from './CommentList'
 import * as uuid from 'uuid'
 import { reset } from 'redux-form'
+import { Loader } from 'semantic-ui-react'
 
 
 class PostDetail extends Component {
@@ -33,10 +34,12 @@ class PostDetail extends Component {
     this.props.dispatch(removePost(this.props.match.params.postId))
     this.props.history.push(`/`)
   }
-  commentVoteClickHanndler = (commentId, voteType) => (
+  commentVoteClickHandler = (commentId, voteType) => (
     this.props.dispatch(voteComment(commentId, voteType))
   )
-
+  deleteCommentHandler = (commentId) => {
+    this.props.dispatch(removeComment(commentId))
+  }
   newCommentSubmit = values => {
     const  {comment, owner} = values
 
@@ -50,9 +53,21 @@ class PostDetail extends Component {
     this.props.dispatch(reset('comment'))
   }
 
+  editCommentSubmit = (values, commentId) => {
+    const  { comment } = values
+
+    const content = {
+      'body': comment,
+      'timestamp': new Date(),
+      'id': commentId
+    }
+    this.props.dispatch(submitEditedComment(content))
+  }
+
+
   postDisplay(postId, posts, fetching) {
       if (fetching) {
-        return <div>hold on</div>
+        return <Loader active inline='centered' />
       } else if (R.has(postId, posts) & R.not(R.path([postId, 'deleted'], posts))) {
         return <PostContent
         voteClickHandler={this.postVoteClickHandler}
@@ -65,12 +80,17 @@ class PostDetail extends Component {
 
   commentDisplay(postId, postComments, comments, fetching, posts) {
       if (fetching) {
-        return <div>hold on</div>
-      } else if (R.has(postId, postComments) & R.not(R.path([postId, 'deleted'], posts))) {
-        return (<CommentList
+        return ''
+      } else if (R.has(postId, postComments) &
+                R.not(R.path([postId, 'deleted'], posts))) {
+        return (
+          <CommentList
                 comments={R.props(R.prop(postId, postComments), comments)}
-                voteClickHandler={this.commentVoteClickHanndler}
-                newCommentSubmit={this.newCommentSubmit}/>)
+                voteCommentHandler={this.commentVoteClickHandler}
+                editCommentSubmit={this.editCommentSubmit}
+                deleteCommentHandler={this.deleteCommentHandler}
+                newCommentSubmit={this.newCommentSubmit}
+                />)
     }  else {
       return <div>nope</div>
     }
