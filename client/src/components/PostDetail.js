@@ -72,7 +72,8 @@ class PostDetail extends Component {
         return <PostContent
         voteClickHandler={this.postVoteClickHandler}
                 deletePostHandler={this.deletePostHandler}
-                post={R.prop(postId, posts)} />
+                post={R.prop(postId, posts)}
+                />
     }  else {
       return <div>nope</div>
     }

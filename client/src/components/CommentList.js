@@ -17,7 +17,8 @@ class CommentList extends Component {
     return (
       <Segment>
         <Comment.Group>
-          <Header as='h3' dividing>Comments</Header>
+          <Header as='h3' dividing>Comments ({
+            R.length(R.keys(this.props.comments))})</Header>
           <div>
             {R.map((comment) => (
               comment.id === this.state.editComment ?
