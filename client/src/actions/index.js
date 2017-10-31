@@ -1,4 +1,5 @@
 import * as R from 'ramda'
+import { apiFetch, apiPut, apiPost, apiDelete } from '../utils/api.js'
 
 export const UPDATE_SORT = 'UPDATE_SORT'
 export const REQUEST_CATEGORIES = 'REQUEST_CATEGORIES'
@@ -21,38 +22,6 @@ export const UPDATE_COMMENT_VOTE = 'UPDATE_COMMENT_VOTE'
 export const ADD_COMMENT = 'ADD_COMMENT'
 export const EDIT_COMMENT = 'EDIT_COMMENT'
 export const DELETE_COMMENT = 'DELETE_COMMENT'
-
-
-const auth = 'Z2V2kdf#m<.'
-
-const apiFetch = (path) => (
-  fetch(`http://localhost:5001/${path}`,
-   {'headers': {'Authorization': auth}})
-)
-
-const apiPut = (path, content) => (
-  fetch(`http://localhost:5001/${path}`,
-    R.merge({'headers': {'Authorization': auth,
-               'Content-Type': 'application/json'},
-    'method': 'put'
-  }, content))
-)
-
-const apiPost = (path, content) => {
-  return fetch(`http://localhost:5001/${path}`,
-   R.merge({'headers': {'Authorization': auth,
-              'Content-Type': 'application/json'},
-   'method': 'post'
- }, content))
-}
-
-const apiDelete = (path, content) => {
-  return fetch(`http://localhost:5001/${path}`,
-   R.merge({'headers': {'Authorization': auth,
-              'Content-Type': 'application/json'},
-   'method': 'delete'
- }, content))
-}
 
 // update sorting
 export function updateSort(sortKey) {

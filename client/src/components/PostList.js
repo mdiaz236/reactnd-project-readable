@@ -2,7 +2,7 @@ import  React, { Component } from 'react'
 import * as R from 'ramda'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
-import { fetchPosts, votePost} from '../actions'
+import { fetchPosts, votePost, removePost} from '../actions'
 import PostSummary from  './PostSummary'
 import SortPost from './SortPost'
 
@@ -27,8 +27,10 @@ class PostList extends Component {
           <div>
           {R.map((post) => (
             <PostSummary key={R.prop('id', post)} post={post }
-            voteClickHandler={(voteType) =>
-              this.props.dispatch(votePost(R.prop('id', post), voteType))}
+              voteClickHandler={(voteType) =>
+                this.props.dispatch(votePost(R.prop('id', post), voteType))}
+              deleteHandler={() =>
+                this.props.dispatch(removePost(R.prop('id', post)))}
               />
           ), R.reverse(
             R.sortBy(
