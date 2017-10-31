@@ -10,7 +10,7 @@ import CommentList from './CommentList'
 import * as uuid from 'uuid'
 import { reset } from 'redux-form'
 import { Loader } from 'semantic-ui-react'
-
+import NotFound from './NotFound'
 
 class PostDetail extends Component {
 
@@ -68,22 +68,34 @@ class PostDetail extends Component {
   postDisplay(postId, posts, fetching) {
       if (fetching) {
         return <Loader active inline='centered' />
-      } else if (R.has(postId, posts) & R.not(R.path([postId, 'deleted'], posts))) {
+      } else if(R.has(
+        postId,
+          R.reject(R.or(
+            R.propEq('deleted', R.T),
+            R.has('error')
+          ), posts))) {
         return <PostContent
         voteClickHandler={this.postVoteClickHandler}
                 deletePostHandler={this.deletePostHandler}
                 post={R.prop(postId, posts)}
                 />
     }  else {
-      return <div>nope</div>
+      return <NotFound />
     }
   }
 
   commentDisplay(postId, postComments, comments, fetching, posts) {
       if (fetching) {
         return ''
-      } else if (R.has(postId, postComments) &
-                R.not(R.path([postId, 'deleted'], posts))) {
+      } else if (R.and(
+        R.has(postId, postComments),
+        R.has(
+          postId,
+            R.reject(R.or(
+              R.propEq('deleted', R.T),
+              R.has('error')
+            ), posts)))
+         ){
         return (
           <CommentList
                 comments={R.props(R.prop(postId, postComments), comments)}
@@ -93,7 +105,7 @@ class PostDetail extends Component {
                 newCommentSubmit={this.newCommentSubmit}
                 />)
     }  else {
-      return <div>nope</div>
+      return ''
     }
   }
 

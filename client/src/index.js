@@ -7,7 +7,7 @@ import CategoryList from './components/CategoryList'
 import PostDetail from './components/PostDetail'
 import NewPost from './components/NewPost'
 import EditPost from './components/EditPost'
-
+import NotFound from './components/NotFound'
 
 import registerServiceWorker from './registerServiceWorker'
 import thunkMiddleware from 'redux-thunk'
@@ -46,12 +46,13 @@ ReactDOM.render(
     <ConnectedRouter history={history}>
     <div className="ui container">
         <App />
-        <Route exact path="/" component={PostList} />
-        <Route path="/category/:category" component={CategoryList} />
         <Switch>
+          <Route exact path="/" component={PostList} />
+          <Route path="/category/:category" component={CategoryList} />
           <Route path="/post/new" component={NewPost} />
           <Route path="/post/:postId/edit" component={EditPost} />
           <Route path="/post/:postId" component={PostDetail} />
+          <Route component={NotFound} status={404} />
         </Switch>
       </div>
     </ConnectedRouter>

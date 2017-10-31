@@ -96,7 +96,11 @@ function requestPosts() {
 function receivePosts(posts) {
   return {
     type: RECEIVE_POSTS,
-    posts
+    posts: R.reject(R.or(
+          R.propEq('deleted', R.T),
+          R.has('error'),
+          R.equals(0, (post) => R.empty(R.keys(post)))
+        ), posts)
   }
 }
 

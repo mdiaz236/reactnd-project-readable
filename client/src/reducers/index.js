@@ -79,7 +79,9 @@ function posts(state = {
     case RECEIVE_POST:
       return R.merge(state, {
         isFetching: false,
-        items: R.assoc(action.postId, action.post, state.items)
+        items: R.has('id', action.post) ?
+                R.assoc(action.postId, action.post, state.items)
+                : state.items
       })
     case UPDATE_POST_VOTE:
       return R.merge(state, {
