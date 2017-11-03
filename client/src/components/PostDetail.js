@@ -31,8 +31,8 @@ class PostDetail extends Component {
   )
 
   deletePostHandler = () => {
-    this.props.dispatch(removePost(this.props.match.params.postId))
-    this.props.history.push(`/`)
+    this.props.dispatch(removePost(this.props.match.params.postId,
+        this.props.history))
   }
   commentVoteClickHandler = (commentId, voteType) => (
     this.props.dispatch(voteComment(commentId, voteType))

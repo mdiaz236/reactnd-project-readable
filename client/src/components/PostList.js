@@ -30,12 +30,13 @@ class PostList extends Component {
               voteClickHandler={(voteType) =>
                 this.props.dispatch(votePost(R.prop('id', post), voteType))}
               deleteHandler={() =>
-                this.props.dispatch(removePost(R.prop('id', post)))}
+                this.props.dispatch(removePost(R.prop('id', post),
+                this.props.history))}
               />
           ), R.reverse(
             R.sortBy(
               R.prop(this.props.sortKey),
-                    R.reject(R.prop('deleted'), R.values(this.props.posts)))))}
+                    R.reject(R.propEq('deleted', true), R.values(this.props.posts)))))}
           </div>
         </Container>
       </div>

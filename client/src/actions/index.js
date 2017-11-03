@@ -204,10 +204,12 @@ function deletePost(postId) {
   }
 }
 
-export function removePost(postId) {
+export function removePost(postId, history) {
   return dispatch => {
     dispatch(deletePost(postId))
     return apiDelete(`posts/${postId}`)
+    .then(() => fetchPosts)
+    .then(() => history.push(`/`))
   }
 }
 

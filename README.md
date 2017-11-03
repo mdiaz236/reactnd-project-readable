@@ -8,8 +8,6 @@ A react/redux app that has text posts with voting and commenting.
 ### Installation
 To install dependencies:
 `npm install`
-or
-`yarn`
 
 ### Running
 To run the server:
@@ -24,11 +22,11 @@ The server is based on the [starter repo](https://github.com/udacity/reactnd-pro
 
 In the client directory (`cd client`), install dependencies:
 
-`yarn` or `npm install`
+`npm install`
 
 ### Running
 In the client directory (`cd client`), start the client dev server:
-`yarn start` or `npm start`
+`npm start`
 
 ### Attribution
 

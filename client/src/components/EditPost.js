@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Segment } from 'semantic-ui-react'
+import { Loader, Segment } from 'semantic-ui-react'
 import {editPost, fetchPost} from '../actions'
 import { connect } from 'react-redux'
 import * as R from 'ramda'
@@ -36,7 +36,7 @@ class EditPost extends Component {
   render() {
     return (
       <Segment>
-      {this.props.isFetchingPost ? <div>nope</div> :
+      {this.props.isFetchingPost ? <Loader active inline='centered' /> :
       <PostForm onSubmit={this.handleSubmit}
       categoryOptions={ this.props.categoryOptions}
       categoryDisabled={true}
